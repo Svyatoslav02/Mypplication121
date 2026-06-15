@@ -1,8 +1,7 @@
 package com.example.myapplication;
 
+import androidx.room.Room;
 import android.os.Bundle;
-import android.widget.Button;
-import android.widget.EditText;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -10,7 +9,11 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import java.util.List;
+
 public class MainActivity extends AppCompatActivity {
+
+    private AppDatabase database;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -18,20 +21,15 @@ public class MainActivity extends AppCompatActivity {
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_main);
 
-        Button SubmitButton = findViewById(R.id.button);
-        EditText EmailText = findViewById(R.id.editTextTextEmailAddress);
-        EditText NameText = findViewById(R.id.editTextText);
-        EditText AgeText = findViewById(R.id.editTextNumber);
+        database = Room.databaseBuilder(getApplicationContext(),AppDatabase.class,
+        "user_db").allowMainThreadQueries().build();
 
-        SubmitButton.setOnClickListener( obj -> {
-            if(UtilityFunctions.TextFieldIsEmpty(EmailText) || UtilityFunctions.TextFieldIsEmpty(NameText)
-            || UtilityFunctions.TextFieldIsEmpty(AgeText))
-            {
-                return;
-            }
-            Student student = new Student(NameText.toString(), Integer.parseInt(AgeText.toString()), EmailText.toString());
-            System.out.println(student.toString());
-        });
+        UserEntity user = new UserEntity();
+        user.name = "test user";
+        user.age = 37;
+        database.userDao().insert(user);
+
+        List<UserEntity> listOfUser  =database.userDao().getAllUsers();
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
