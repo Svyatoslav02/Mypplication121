@@ -4,19 +4,33 @@ import androidx.annotation.NonNull;
 
 public class Student {
     private final String Name;
-    private int Age;
     private String Email;
+    private String Group;
 
-    public Student(String name, int age, String email){
+    public Student(String name, String email, String group){
         this.Name = name;
-        this.Age = age;
         this.Email = email;
+        this.Group = group;
     }
+
+    public String getNam()
+    {
+        return Name;
+    }
+    public String getEmail()
+    {
+        return Email;
+    }
+    public String getGroup()
+    {
+        return Group;
+    }
+
 
     @NonNull
     @Override
     public String toString()
     {
-        return "Name: " + Name + " Age: "+ Age + " Email: " + Email;
+        return "Name: " + Name + "Group : "+ Group + " Email: " + Email;
     }
 }
